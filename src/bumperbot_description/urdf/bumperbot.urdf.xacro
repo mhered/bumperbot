@@ -1,0 +1,130 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="https://www.ros.org/wiki/xacro" name="bumperbot">
+
+
+    <!-- define color for rviz -->
+    <material name="WHITE">
+        <color rgba="1.0 1.0 1.0 1.0" /> <!-- rviz white color -->
+    </material>
+    <material name="CYAN">
+        <color rgba="0.0 1.0 1.0 1.0" /> <!-- rviz cyan color -->
+    </material>
+    <material name="YELLOW">
+        <color rgba="1.0 1.0 0.0 1.0" /> <!-- rviz yellow color -->
+    </material>
+    
+    <!--base_footprint
+    link-->
+    <link name="base_footprint" />
+
+    <!--base_link
+    link-->
+    <link name="base_link">
+        <visual>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+
+            <geometry>
+                <mesh filename="package://bumperbot_description/meshes/base_link.STL" />
+            </geometry>
+            <material name="WHITE"/> <!-- color for rviz -->
+        </visual>
+    </link>
+
+
+    <!--base_joint
+    joint-->
+    <joint name="base_joint" type="fixed">
+        <parent link="base_footprint" />
+        <child link="base_link" />
+        <origin xyz="0.0 0.0 0.033" rpy="0.0 0.0 0.0" />
+
+    </joint>
+
+    <!--wheel_right_link
+    link-->
+    <link name="wheel_right_link">
+        <visual>
+            <origin xyz="0.0 0.0 0.0" rpy="${pi/2} 0.0 0.0" />
+            <geometry>
+                <mesh filename="package://bumperbot_description/meshes/wheel_right_link.STL" />
+            </geometry>
+            <material name="CYAN"/> <!-- color for rviz -->
+        </visual>
+    </link>
+
+    <!--wheel_right_joint
+    joint-->
+    <joint name="wheel_right_joint" type="continuous">
+        <parent link="base_link" />
+        <child link="wheel_right_link" />
+        <axis xyz="0 1 0" />
+        <origin xyz="0.0 -0.07 0.0" rpy="0.0 0.0 0.0" />
+
+    </joint>
+
+    <!--wheel_left_link
+    link-->
+    <link name="wheel_left_link">
+        <visual>
+            <origin xyz="0.0 0.0 0.0" rpy="${-pi/2} 0.0 0.0" />
+            <geometry>
+                <mesh filename="package://bumperbot_description/meshes/wheel_left_link.STL" />
+            </geometry>
+            <material name="CYAN"/> <!-- color for rviz -->
+        </visual>
+    </link>
+
+    <!--wheel_left_joint
+    joint-->
+    <joint name="wheel_left_joint" type="continuous">
+        <parent link="base_link" />
+        <child link="wheel_left_link" />
+        <axis xyz="0 1 0" />
+        <origin xyz="0.0 0.07 0.0" rpy="0.0 0.0 0.0" />
+
+    </joint>
+
+    <!--caster_front_link
+    link-->
+    <link name="caster_front_link">
+        <visual>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+            <geometry>
+                <mesh filename="package://bumperbot_description/meshes/caster_front_link.STL" />
+            </geometry>
+            <material name="YELLOW"/> <!-- color for rviz -->
+        </visual>
+    </link>
+
+    <!--caster_front_joint
+    joint-->
+    <joint name="caster_front_joint" type="fixed">
+        <parent link="base_link" />
+        <child link="caster_front_link" />
+        <origin xyz="0.04755 0.0 -0.0275" rpy="0.0 0.0 0.0" />
+
+    </joint>
+
+    <!--caster_rear_link
+    link-->
+    <link name="caster_rear_link">
+        <visual>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+            <geometry>
+                <mesh filename="package://bumperbot_description/meshes/caster_rear_link.STL" />
+            </geometry>
+            <material name="YELLOW"/> <!-- color for rviz -->
+        </visual>
+    </link>
+
+    <!--caster_rear_joint
+    joint-->
+    <joint name="caster_rear_joint" type="fixed">
+        <parent link="base_link" />
+        <child link="caster_rear_link" />
+        <origin xyz="-0.04755 0.0 -0.0275" rpy="0.0 0.0 0.0" />
+
+    </joint>
+
+</robot>
