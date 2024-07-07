@@ -14,11 +14,13 @@ https://www.udemy.com/course/self-driving-and-ros-2-learn-by-doing-odometry-cont
 
 * [Notes on Section 2: Setup](./Section_2_Setup.md)
 
-* [Notes on Section 3 A: Introduction to ROS2. Why ROS2?](./Section_3A_Intro_to_ROS2_Why_ROS2.md)
-* [Notes on Section 3 B: Introduction to ROS2. Simple Pub/Sub in Python](./Section_3B_Intro_to_ROS2_Simple_Pub_Sub_Python.md)
-* [Notes on Section 3 C: Introduction to ROS2. Simple Pub/Sub in C++](./Section_3C_Intro_to_ROS2_Simple_Pub_Sub_CPP.md)
-* [Notes on Section 4: Locomotion](./Section_4_Locomotion.md)
-* 
+* [Notes on Section 3: Introduction to ROS2. Why ROS2?](./Section_3_Intro_to_ROS2_Why_ROS2.md)
+* [Notes on Section 4: Locomotion. URDF](./Section_4_Locomotion.md)
+
+### Code examples for Course 1
+
+* [Python code examples](./Python_code_examples.md)
+* [C++ code examples](./CPP_code_examples.md)
 
 ## Course 2 - Mapping and Localization
 

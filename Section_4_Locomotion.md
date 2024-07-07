@@ -154,6 +154,3 @@ $ ros2 launch urdf_tutorial display.launch.py model:=/home/mhered/bumperbot_ws/s
 
 Tool that allows visualizing robots, obstacles, maps, or simulated sensor readings e.g. from laser scanners or cameras using plugins that produce intuitive graphical displays from messages published in certain ROS2 topics
 
-## Node with parameters in python
-
-Certain nodes take parameters , i.e. settings to configure their behaviour

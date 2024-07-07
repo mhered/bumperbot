@@ -1,4 +1,63 @@
-# Section 3 C: Introduction to ROS2. Simple publisher subscriber nodes in C++ (3.23, 3.25)
+# C++ code examples
+
+## Section 3: Introduction to ROS2. Simple publisher subscriber nodes in C++ (3.23, 3.25)
+
+### Setup workspace
+
+* Create workspace
+
+```bash
+$ mkdir -p bumperbot_ws/src
+```
+
+* initialize
+
+```bash
+$ colcon build
+```
+
+Generates automatically `build` (intermediate files) `install` (final executable files) and `log` folders
+
+### Create the first package: subscriber in python 
+
+create a C++ package named `bumperbot_py_examples`:
+
+```bash
+$ cd src
+$ ros2 pkg create --build-type ament_cmake bumperbot_cpp_examples
+```
+
+Note difference with command to create a python package:
+
+```bash
+$ ros2 pkg create --build-type ament_python bumperbot_py_examples
+```
+
+Now if we rebuild the workspace (assuming python package was created too) two packages are created:
+
+```bash
+$ cd .. && colcon build
+Starting >>> bumperbot_cpp_examples
+Starting >>> bumperbot_py_examples
+Finished <<< bumperbot_cpp_examples [0.62s]
+Finished <<< bumperbot_py_examples [0.70s]          
+
+Summary: 2 packages finished [0.92s]
+```
+
+* activate the workspace so the packages are recognized by sourcing the workspace (only affects current terminal). He claims it is good practice to do it from a different terminal to the one we are using to build it (??)
+
+```bash
+$ source install/setup.bash
+$ ros2 pkg list 
+ackermann_msgs...
+builtin_interfaces
+bumperbot_cpp_examples
+bumperbot_py_examples
+camera_calibration_parsers
+...
+zstd_vendor
+```
 
 Typical folder structure of CPP package
 
@@ -15,7 +74,7 @@ $ tree ~/bumperbot_ws/src/bumperbot_cpp_examples/
 
 `include/bumperbot_cpp_examples` contains header files with classes declarations and `src` contains cpp files with implementation
 
-## Simple publisher in C++
+### Simple publisher in C++
 
 * Create the `simple_publisher.cpp` file in [`./src/bumperbot_cpp_examples/src/`](./src/bumperbot_cpp_examples/src/) folder
 * update `CMakeLists.txt` to add dependencies, declare the executable and install it
@@ -71,7 +130,7 @@ $ ros2 topic info /chatter --verbose
 $ ros2 topic hz /chatter
 ```
 
-## Simple subscriber in C++
+### Simple subscriber in C++
 
 * Create the `simple_subscriber.cpp` file in [`./src/bumperbot_cpp_examples/src/`](./src/bumperbot_cpp_examples/src/) folder
 * Note: I had to do some changes in the code, needed to compile (may be because I am using ROS2 foxy?).

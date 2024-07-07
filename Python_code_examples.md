@@ -1,4 +1,6 @@
-# Section 3 B: Introduction to ROS2. Simple publisher subscriber nodes in python (3.21, 3.22, 3.24)
+# Python code examples
+
+## Section 3: Introduction to ROS2. Simple publisher / subscriber nodes in python (3.21, 3.22, 3.24)
 
 ### Setup workspace
 
@@ -18,7 +20,7 @@ Generates automatically `build` (intermediate files) `install` (final executable
 
 ### Create the first package: subscriber in python 
 
-create a python package named `bumperbot_py_examples`:
+1. create a python package named `bumperbot_py_examples`:
 
 ```bash
 $ cd src
@@ -50,13 +52,13 @@ creating ./bumperbot_py_examples/test/test_pep257.py
 
 ```
 
-Or in C++:
+Note difference vs the command for a C++ package:
 
 ```bash
 $ ros2 pkg create --build-type ament_cmake bumperbot_cpp_examples
 ```
 
-Now if we rebuild the workspace two packages are created:
+If we create also the C++ package and we rebuild the workspace two packages are created:
 
 ```bash
 $ cd .. && colcon build
@@ -68,7 +70,7 @@ Finished <<< bumperbot_py_examples [0.70s]
 Summary: 2 packages finished [0.92s]
 ```
 
-Now activate the workspace so the packages are recognized by sourcing the workspace (only affects current terminal). He claims it is good practice to do it from a different terminal to the one we are using to build it (??)
+2. activate the workspace so the packages are recognized by sourcing the workspace (only affects current terminal). He claims it is good practice to do it from a different terminal to the one we are using to build it (??)
 
 ```bash
 $ source install/setup.bash
@@ -82,7 +84,7 @@ camera_calibration_parsers
 zstd_vendor
 ```
 
-* python packages structure
+Typical structure of a python package
 
 ```bash
 $ tree ~/bumperbot_ws/src/bumperbot_py_examples/
@@ -102,9 +104,11 @@ $ tree ~/bumperbot_ws/src/bumperbot_py_examples/
 3 directories, 8 files
 ```
 
-* the  [`bumperbot_py_examples`](./src/bumperbot_py_examples/bumperbot_py_examples/)  folder contains the python code, create a python file inside it called `simple_publisher.py`
+The  [`bumperbot_py_examples`](./src/bumperbot_py_examples/bumperbot_py_examples/)  folder contains the python code.
 
-* `setup.py` contains the instructions to make an executable. Add an entry point so that when `simple_publisher` node is called, it executes function `main` in `simple_publisher` file inside `bumperbot_py_examples` package :
+3. create a python file inside it called `simple_publisher.py`
+
+4. `setup.py` contains the instructions to make an executable. Add an entry point so that when `simple_publisher` node is called, it executes function `main` in `simple_publisher` file inside `bumperbot_py_examples` package :
 
 ```json
 ...   
@@ -114,14 +118,14 @@ entry_points={create a simple_subscriber.py file inside
         ],
 ```
 
-*  in `package.xml`  declare execution dependencies (the two libraries we included in the script)
+5. in `package.xml`  declare execution dependencies (the two libraries we included in the script)
 
 ```xml
   <exec_depend>rclpy</exec_depend>
   <exec_depend>std-msgs</exec_depend>
 ```
 
-* build with colcon
+6. build with colcon
 
 ```bash
 $ colcon build
@@ -133,7 +137,7 @@ Finished <<< bumperbot_py_examples [0.64s]
 Summary: 2 packages finished [0.83s]
 ```
 
-* in a different terminal source the workspace and run the node
+7. in a different terminal source the workspace and run the node
 
 ```bash
 $ source install/setup.bash
@@ -192,10 +196,11 @@ average rate: 1.000
 
 ```
 
-### Subscriber in python
+## Subscriber in python
 
-* create `simple_subscriber.py` file inside [`bumperbot_py_examples`](./src/bumperbot_py_examples/bumperbot_py_examples/) folder
-* Add an entry point in `setup.py` :
+1. create `simple_subscriber.py` file inside [`bumperbot_py_examples`](./src/bumperbot_py_examples/bumperbot_py_examples/) folder
+
+2. Add an entry point in `setup.py` :
 
 ```json
 ...   
@@ -206,13 +211,13 @@ entry_points={create a simple_subscriber.py file inside
         ],
 ```
 
-*  build with colcon
+3. build with colcon
 
 ```bash
 $ colcon build
 ```
 
-* in a different terminal source the workspace and run the node
+4. in a different terminal source the workspace and run the node
 
 ```bash
 $ source install/setup.bash
@@ -221,5 +226,79 @@ $ ros2 run bumperbot_py_examples simple_subscriber
 [INFO] [1719219470.972924372] [simple_subscriber]: I heard: Hello, ROS2 - counter: 717 
 [INFO] [1719219471.972834813] [simple_subscriber]: I heard: Hello, ROS2 - counter: 718 
 ...s
+```
+
+## Section 4: Locomotion. Simple parametric node in python (4.34)
+
+### Node with parameters in python
+
+Certain nodes take parameters , i.e. settings to configure their behaviour
+
+1. create file `simple_parametric.py` inside [`bumperbot_py_examples`](./src/bumperbot_py_examples/bumperbot_py_examples) folder and write the code for parametric node
+
+2. add the entry point in `setup.py`: 
+
+```            'simple_parametric = bumperbot_py_examples.simple_parametric:main',
+ entry_points={
+        'console_scripts': [
+            ...
+            bumperbot_py_examples.simple_parametric:main',
+        ],
+```
+
+3. add a missing dependency in `package.xml`:
+
+```
+  <exec_depend>rcl_interfaces</exec_depend>
+```
+
+4. as usual, build with colcon, then source in a different terminal.
+
+5. run the node with default param values with:
+
+```bash
+$ ros2 run bumperbot_py_examples simple_parametric 
+```
+
+* check available parameters, and their values:
+
+```bash
+$ ros2 param list
+/simple_parametric:
+  simple_int_param
+  simple_string_param
+  use_sim_time
+  
+$ ros2 param get /simple_parametric simple_int_param 
+Integer value is: 0
+$ ros2 param get /simple_parametric simple_string_param 
+String value is: hello
+```
+
+* You can run the node passing custom params:
+
+```bash
+$ ros2 run bumperbot_py_examples simple_parametric --ros-args -p simple_int_param:=30 
+$ ros2 param get /simple_parametric simple_int_param 
+Integer value is: 30
+```
+
+* you can also modify parameters at run time:
+
+```bash
+$ ros2 param get /simple_parametric simple_string_param
+String value is: Hello
+$ ros2 param set /simple_parametric simple_string_param "Goodbye"
+Set parameter successful
+$ ros2 param get /simple_parametric simple_string_param
+String value is: Goodbye
+```
+
+And with the implementation we made, the callback function yields the following terminal output:
+
+```bash
+$ ros2 run bumperbot_py_examples simple_parametric 
+[INFO] [1719431653.982840885] [simple_parametric]: Parameter simple_string_param changed to : Goodbye
+
 ```
 

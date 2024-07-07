@@ -1,4 +1,4 @@
-# Section 3A: Why ROS2? (3.14-3.20)
+# Section 3: Why ROS2? (3.14-3.20)
 
 Needed to overcome shortcomings for applications not initially contemplated when ROS was designed in 2007:
 
