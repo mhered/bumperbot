@@ -20,6 +20,7 @@ find_package(ament_cmake REQUIRED)
 # find dependencies
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(rcl_interfaces REQUIRED)
 
 # declare executables and their dependencies 
 add_executable(simple_publisher src/simple_publisher.cpp)
@@ -28,10 +29,14 @@ ament_target_dependencies(simple_publisher rclcpp std_msgs)
 add_executable(simple_subscriber src/simple_subscriber.cpp)
 ament_target_dependencies(simple_subscriber rclcpp std_msgs)
 
+add_executable(simple_parametric src/simple_parametric.cpp)
+ament_target_dependencies(simple_parametric rclcpp rcl_interfaces)
+
 #install them
 install(TARGETS
   simple_publisher
   simple_subscriber
+  simple_parametric
   DESTINATION lib/${PROJECT_NAME}
 )
 
