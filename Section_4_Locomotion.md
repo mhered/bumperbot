@@ -154,3 +154,131 @@ $ ros2 launch urdf_tutorial display.launch.py model:=/home/mhered/bumperbot_ws/s
 
 Tool that allows visualizing robots, obstacles, maps, or simulated sensor readings e.g. from laser scanners or cameras using plugins that produce intuitive graphical displays from messages published in certain ROS2 topics
 
+## Visualizing the robot
+
+Requires 3 steps: 
+
+1. Run the state publisher node which reads the robot description and publishes the state of the frames in a ros topic
+
+   As  `robot_state_publisher` is a general purpose node, we need to specify the robot description in URDF. We used xacro, so we need to pass it through the xacro "translator" first so the value we pass to the `robot_description` parameter should be `"$ (xacro FULL_PATH_TO_XACRO_FILE )"`: 
+
+```bash
+$ ros2 run robot_state_publisher robot_state_publisher --ros-args -p robot_description:="$( xacro /home/mhered/bumperbot_ws/src/bumperbot_description/urdf/bumperbot.urdf.xacro)"
+Parsing robot urdf xml string.
+Link base_link had 4 children
+Link caster_front_link had 0 children
+Link caster_rear_link had 0 children
+Link wheel_left_link had 0 children
+Link wheel_right_link had 0 children
+[INFO] [1720398408.822184680] [robot_state_publisher]: got segment base_footprint
+[INFO] [1720398408.822233582] [robot_state_publisher]: got segment base_link
+[INFO] [1720398408.822240288] [robot_state_publisher]: got segment caster_front_link
+[INFO] [1720398408.822246154] [robot_state_publisher]: got segment caster_rear_link
+[INFO] [1720398408.822251902] [robot_state_publisher]: got segment wheel_left_link
+[INFO] [1720398408.822257250] [robot_state_publisher]: got segment wheel_right_link
+```
+
+2. On a separate terminal we source our workspace and launch another node that creates a GUI with sliders for all movable joints:
+
+```bash
+$ source install/setup.bash
+$ ros2 run joint_state_publisher_gui joint_state_publisher_gui 
+[INFO] [1720398684.498330979] [joint_state_publisher]: Waiting for robot_description to be published on the robot_description topic...
+[INFO] [1720398684.516544650] [joint_state_publisher]: Centering
+[INFO] [1720398684.593048187] [joint_state_publisher]: Centering
+```
+
+3. On a third terminal we launch rviz for visualization:
+
+```bash
+$ ros2 run rviz2 rviz2
+```
+
+And configure it: 
+
+* Set **Fixed frame** to `base_footprint` to get rid of the error 
+* Add **TF** plugin, to see the frames. Click  **Show Names** and change **Marker Scale** to **0.5** to improve visibility
+* Add the **RobotModel** plugin, and set **Description Topic** to `/robot_description` to visualize the robot
+* We can save this configuration as `display.rviz` in [./src/bumperbot_description/rviz](./src/bumperbot_description/rviz), and recover calling rviz with `$ ros2 run rviz2 rviz2 -d /home/mhered/bumperbot_ws/src/bumperbot_description/rviz/display.rviz`
+
+![](./assets/bumperbot_rviz_loop_fast_xs.gif)
+
+With the sliders you can actuate the joints
+
+### Launch files
+
+Launch files allow automating the process of launching several nodes in sequence in different terminals, configuring parameters, even launching external processes etc. with a single command
+
+Can be written in python (default in ROS2), and also in xml and yaml with some limitations. 
+
+Essentially they list instructions to execute in order
+
+called with the command `ros2 launch`
+
+Principle: composition and reusability. Create a launch file for each logically separated functionality. Then several launch files can be called by a master launch file that considers dependencies and priorities.
+
+The list of operations and applications to start by a launch file is called the launch description. We will use two libraries to provide these instructions:
+
+* `launch` > functionalities for managing and configuring the launch file itself and its interfaces with the outside
+* `launch_ros` > functionalities specific to ROS2 such as managing nodes, parameters
+
+1. Create [./src/bumperbot_description/launch](./src/bumperbot_description/launch) folder and write `display.launch.py` which:
+
+   * declares `model_arg` string parameter equivalent to `/home/mhered/bumperbot_ws/src/bumperbot_description/urdf/bumperbot.urdf.xacro`
+   * declares `robot_state_publisher_node` node equivalent to:ç
+
+   ```bash
+   $ ros2 run robot_state_publisher robot_state_publisher --ros-args -p robot_description:="$( xacro /home/mhered/bumperbot_ws/src/bumperbot_description/urdf/bumperbot.urdf.xacro)"
+   ```
+
+   * declares `robot_state_publisher_gui_node` node equivalent to:
+
+   ```bash
+   $ ros2 run joint_state_publisher_gui joint_state_publisher_gui
+   ```
+
+   * declares `rviz_node` node with parameter equivalent to:
+
+   ```bash
+   $ ros2 run rviz2 rviz2 -d /home/mhered/bumperbot_ws/src/bumperbot_description/rviz/display.rviz
+   ```
+
+   
+
+2. install folders `rviz` and `launch` in `CMakeLists.txt`
+
+```cmake
+...
+# install folders
+install(
+  DIRECTORY meshes urdf rviz launch
+  DESTINATION share/${PROJECT_NAME}
+)
+...
+```
+
+
+
+1. add dependencies in `package.xml`:
+
+```xml
+...  
+<exec_depend>robot_state_publisher</exec_depend>
+<exec_depend>robot_state_publisher_gui</exec_depend>
+<exec_depend>rviz2</exec_depend>
+<exec_depend>ros2launch</exec_depend>
+...
+```
+
+4. build with `colcon build`
+5. in another terminal source and run:
+
+```bash
+$ source install/setup.bash
+$ ros2 launch bumperbot_description display.launch.py
+```
+
+
+
+
+
