@@ -282,5 +282,20 @@ $ ros2 launch bumperbot_description display.launch.py
 
 
 
+## Gazebo
 
+Physics engine widely used for robotics. Simulates gravity, friction, acceleration, etc for simulating and debugging robotics applications.
 
+Allows simulating robot movements and sensors in a virtual environment
+
+A real robot publishes messages related to its status e.g. `/joint_states` and sensors publish data in dedicated topics e.g. `/imu` or `/scan`. Other nodes subscribe to these topics and use the messages, e.g. rviz for visualization.
+
+Gazebo replicates the messages published by the real robot. ROS2 nodes subscribed to these topics to implement other functionalities ignore whether the data comes from a real or simulated robot, therefore gazebo allows to simulate, test and debug these ROS2 nodes
+
+We need to adapt the URDF and launch files.
+
+Add physical properties to simulate forces and movements in the URDF:
+
+1. Add <inertial> and <collision> tags to the links. Recommends Solidworks exporter for <inertial> properties.
+
+2. For other tags needed only for gazebo (e.g. friction coefficients, solver accuracy, direction of rotation etc) it is better to create another file `bumperbot_gazebo.urdf` and embed it with `    <xacro:include filename="$(find bumperbot_description)/urdf/bumperbot_gazebo.urdf"/>` as this improves readability
