@@ -154,7 +154,7 @@ $ ros2 launch urdf_tutorial display.launch.py model:=/home/mhered/bumperbot_ws/s
 
 Tool that allows visualizing robots, obstacles, maps, or simulated sensor readings e.g. from laser scanners or cameras using plugins that produce intuitive graphical displays from messages published in certain ROS2 topics
 
-## Visualizing the robot
+## Visualizing the robot (#4.37)
 
 Requires 3 steps: 
 
@@ -205,7 +205,7 @@ And configure it:
 
 With the sliders you can actuate the joints
 
-### Launch files
+### Launch files (#4.38)
 
 Launch files allow automating the process of launching several nodes in sequence in different terminals, configuring parameters, even launching external processes etc. with a single command
 
@@ -222,10 +222,12 @@ The list of operations and applications to start by a launch file is called the 
 * `launch` > functionalities for managing and configuring the launch file itself and its interfaces with the outside
 * `launch_ros` > functionalities specific to ROS2 such as managing nodes, parameters
 
+## Visualizing the robot with a launch file (#4.39)
+
 1. Create [./src/bumperbot_description/launch](./src/bumperbot_description/launch) folder and write `display.launch.py` which:
 
    * declares `model_arg` string parameter equivalent to `/home/mhered/bumperbot_ws/src/bumperbot_description/urdf/bumperbot.urdf.xacro`
-   * declares `robot_state_publisher_node` node equivalent to:ç
+   * declares `robot_state_publisher_node` node equivalent to:
 
    ```bash
    $ ros2 run robot_state_publisher robot_state_publisher --ros-args -p robot_description:="$( xacro /home/mhered/bumperbot_ws/src/bumperbot_description/urdf/bumperbot.urdf.xacro)"
