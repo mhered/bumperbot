@@ -299,3 +299,20 @@ Add physical properties to simulate forces and movements in the URDF:
 1. Add <inertial> and <collision> tags to the links. Recommends Solidworks exporter for <inertial> properties.
 
 2. For other tags needed only for gazebo (e.g. friction coefficients, solver accuracy, direction of rotation etc) it is better to create another file `bumperbot_gazebo.urdf` and embed it with `    <xacro:include filename="$(find bumperbot_description)/urdf/bumperbot_gazebo.urdf"/>` as this improves readability
+
+## Gazebo launch file
+
+Copy the `robot_state_publisher_node`
+
+add the set up of  `GAZEBO_MODEL_PATH` environmental variable
+
+add the launch of gazebo server and client by including their respective launch files with `IncludeLaunchDescription` and `PythonLaunchDescriptionSource`, and then spawn the robot
+
+Modify `CMakeLists.txt` to install the `models` folder
+
+Spawn robot digital twin in gazebo with: 
+
+```bash
+$ ros2 launch bumperbot_description gazebo.launch.py
+```
+
