@@ -296,9 +296,8 @@ We need to adapt the URDF and launch files.
 
 Add physical properties to simulate forces and movements in the URDF:
 
-1. Add <inertial> and <collision> tags to the links. Recommends Solidworks exporter for <inertial> properties.
-
-2. For other tags needed only for gazebo (e.g. friction coefficients, solver accuracy, direction of rotation etc) it is better to create another file `bumperbot_gazebo.urdf` and embed it with `    <xacro:include filename="$(find bumperbot_description)/urdf/bumperbot_gazebo.urdf"/>` as this improves readability
+1. Add `<inertial>` and `<collision>` tags to the links. Recommends  [Solidworks Exporter](http://wiki.ros.org/sw_urdf_exporter)  for `<inertial>` properties. See [this discussion](https://github.com/mhered/sevillabot/blob/main/inertial/Inertial.md) for methods to estimate inertial properties from FreeCAD models and [this discussion](https://github.com/mhered/sevillabot/blob/main/inertial/Weighing.md) for experimental estimates of center of mass.
+2. For other tags needed only for gazebo (e.g. friction coefficients, solver accuracy, direction of rotation etc) it is better to create another file `bumperbot_gazebo.urdf` and embed it with ` <xacro:include filename="$(find bumperbot_description)/urdf/bumperbot_gazebo.urdf"/>` as this improves readability
 
 ## Gazebo launch file
 
