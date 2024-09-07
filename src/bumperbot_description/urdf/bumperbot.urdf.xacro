@@ -3,7 +3,7 @@
 <robot xmlns:xacro="https://www.ros.org/wiki/xacro" name="bumperbot">
 
 
-    <!-- define color for rviz -->
+    <!-- define colors for rviz -->
     <material name="WHITE">
         <color rgba="1.0 1.0 1.0 1.0" /> <!-- rviz white color -->
     </material>
@@ -17,14 +17,16 @@
         <color rgba="1.0 0.0 0.0 1.0" /> <!-- rviz red color -->
     </material>
 
+    <!-- include gazebo xacro file -->
     <xacro:include filename="$(find bumperbot_description)/urdf/bumperbot_gazebo.xacro" />
-
-    <!--base_footprint
-    link-->
+    
+    <!-- include ros2 control xacro file -->
+    <xacro:include filename="$(find bumperbot_description)/urdf/bumperbot_ros2_control.xacro"/>
+    
+    <!-- base_footprint link -->
     <link name="base_footprint" />
 
-    <!--base_link
-    link-->
+    <!-- base_link link -->
     <link name="base_link">
 
         <inertial>
@@ -54,8 +56,7 @@
     </link>
 
 
-    <!--base_joint
-    joint-->
+    <!-- base_joint joint -->
     <joint name="base_joint" type="fixed">
         <parent link="base_footprint" />
         <child link="base_link" />
@@ -63,8 +64,7 @@
 
     </joint>
 
-    <!--wheel_right_link
-    link-->
+    <!-- wheel_right_link link -->
     <link name="wheel_right_link">
 
         <inertial>
@@ -95,8 +95,7 @@
 
     </link>
 
-    <!--wheel_right_joint
-    joint-->
+    <!-- wheel_right_joint joint -->
     <joint name="wheel_right_joint" type="continuous">
         <parent link="base_link" />
         <child link="wheel_right_link" />
@@ -105,8 +104,7 @@
 
     </joint>
 
-    <!--wheel_left_link
-    link-->
+    <!-- wheel_left_link link -->
     <link name="wheel_left_link">
 
         <inertial>
@@ -135,8 +133,7 @@
 
     </link>
 
-    <!--wheel_left_joint
-    joint-->
+    <!-- wheel_left_joint joint -->
     <joint name="wheel_left_joint" type="continuous">
         <parent link="base_link" />
         <child link="wheel_left_link" />
@@ -145,8 +142,7 @@
 
     </joint>
 
-    <!--caster_front_link
-    link-->
+    <!-- caster_front_link link-->
     <link name="caster_front_link">
 
         <inertial>
@@ -175,8 +171,7 @@
 
     </link>
 
-    <!--caster_front_joint
-    joint-->
+    <!-- caster_front_joint joint-->
     <joint name="caster_front_joint" type="fixed">
         <parent link="base_link" />
         <child link="caster_front_link" />
@@ -184,8 +179,7 @@
 
     </joint>
 
-    <!--caster_rear_link
-    link-->
+    <!-- caster_rear_link link -->
     <link name="caster_rear_link">
 
         <inertial>
@@ -215,8 +209,7 @@
 
     </link>
 
-    <!--caster_rear_joint
-    joint-->
+    <!-- caster_rear_joint joint -->
     <joint name="caster_rear_joint" type="fixed">
         <parent link="base_link" />
         <child link="caster_rear_link" />
