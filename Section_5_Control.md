@@ -190,5 +190,149 @@ It works!
 
 We still need to launch the controller manager. 
 
-We create a new launch file `controller.launch.py`
+We create a new launch file `controller.launch.py` inside a new `launch`folder in the `bumperbot_controller` package.
+
+This launch file spawns nodes `joint_state_broadcaster` and `simple_velocity_controller` using node `spawner` from package `controller_manager`
+
+In `CMakeLists.txt` we need to install  `launch` 
+
+In `package.xml` we add dependencies:
+
+```xml
+...
+	<exec_depend>ros2launch</exec_depend>
+	<exec_depend>controller_manager</exec_depend>
+...
+```
+
+Note: `ros2launch` is needed for `LaunchDescription` and `Node` classes, `controller_manager` for the `spawner`
+
+Compile with `colcon build`
+
+### Interacting with ros2_control CLI
+
+1. Launch robot simulation
+
+```bash
+$ source install/setup.bash
+$ ros2 launch bumperbot_description gazebo.launch.py 
+```
+
+2. Start control system of the robot
+
+```bash
+$ source install/setup.bash
+$ ros2 launch bumperbot_controller controller.launch.py
+```
+
+Controller manager allows interacting from CLI
+
+e.g. to list controllers currently running
+
+```bash
+$ ros2 control list_controllers
+joint_state_broadcaster[joint_state_broadcaster/JointStateBroadcaster] active    
+simple_velocity_controller[velocity_controllers/JointGroupVelocityController] active   
+```
+
+e.g. list hardware interfaces
+
+```bash
+$ ros2 control list_hardware_interfaces
+command interfaces
+	wheel_left_joint/velocity [claimed]
+	wheel_right_joint/velocity [claimed]
+state interfaces
+	 wheel_left_joint/position
+	 wheel_left_joint/velocity
+	 wheel_right_joint/position
+	 wheel_right_joint/velocity
+```
+
+List topics:
+
+```bash
+$ ros2 topic list
+/clock
+/dynamic_joint_states
+/joint_states
+/parameter_events
+/performance_metrics
+/robot_description
+/rosout
+/simple_velocity_controller/commands
+/tf
+/tf_static
+```
+
+We can use `/simple_velocity_controller/commands` to publish commands:
+
+```bash
+$ ros2 topic pub /simple_velocity_controller/commands std_msgs/msg/Float64MultiArray "layout:
+  dim: []
+  data_offset: 0
+data: [1, -1]" 
+publisher: beginning loop
+publishing #1: std_msgs.msg.Float64MultiArray(layout=std_msgs.msg.MultiArrayLayout(dim=[], data_offset=0), data=[1.0, -1.0])
+
+publishing #2: std_msgs.msg.Float64MultiArray(layout=std_msgs.msg.MultiArrayLayout(dim=[], data_offset=0), data=[1.0, -1.0])
+...
+```
+
+![](./assets/bumperbot_is_alive_xs.gif)
+
+Note: using double tab along the way autocompletes to find the list of available topics, then the list of messages this topic accepts, and finally the template for the message selected (remember need to add " !!):
+
+```bash
+$ ros2 topic pub <\t\t>
+-1                                    --qos-durability
+/clock                                --qos-history
+/dynamic_joint_states                 --qos-profile
+/joint_states                         --qos-reliability
+--keep-alive                          -r
+-n                                    --rate
+--node-name                           /robot_description
+--once                                /rosout
+-p                                    /simple_velocity_controller/commands
+/parameter_events                     -t
+/performance_metrics                  /tf
+--print                               /tf_static
+--qos-depth                           --times
+
+$ ros2 topic pub /simple_velocity_controller/commands <\t\t>
+-1                              --qos-history
+--keep-alive                    --qos-profile
+-n                              --qos-reliability
+--node-name                     -r
+--once                          --rate
+-p                              std_msgs/msg/Float64MultiArray
+--print                         -t
+--qos-depth                     --times
+--qos-durability  
+$ ros2 topic pub /simple_velocity_controller/commands std_msgs/msg/Float64MultiArray <\t\t>
+-1
+--keep-alive
+layout:\^J\ \ dim:\ []\^J\ \ data_offset:\ 0\^Jdata:\ []\
+-n
+--node-name
+--once
+-p
+--print
+--qos-depth
+--qos-durability
+--qos-history
+--qos-profile
+--qos-reliability
+-r
+--rate
+-t
+--times
+
+$ ros2 topic pub /simple_velocity_controller/commands std_msgs/msg/Float64MultiArray "l <\t\t>
+
+$ ros2 topic pub /simple_velocity_controller/commands std_msgs/msg/Float64MultiArray "layout:
+  dim: []
+  data_offset: 0
+data: []" 
+```
 
