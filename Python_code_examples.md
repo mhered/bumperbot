@@ -302,3 +302,150 @@ $ ros2 run bumperbot_py_examples simple_parametric
 
 ```
 
+## Section 6: Kinematics. Roto-translation (6.56,6.59)
+
+### Roto-translation in python
+
+Spawn two turtles:
+
+```bash
+$ ros2 run turtlesim turtlesim_node
+$ ros2 service call /spawn turtlesim/srv/Spawn "x: 4.0
+y: 4.0
+theta: 0.0
+name: 'turtle2'"
+```
+
+`turtle1/pose` and `turtle2/pose` topics publish their respective poses.
+
+Create a node `simple_turtlesim_kinematics.py` inside `bumperbot_py_examples` folder, that publishes the translation vector between `turtle2` and `turtle1`
+
+To find the type of messages:
+
+```bash
+$ ros2 topic info /turtle1/pose
+Type: turtlesim/msg/Pose
+Publisher count: 1
+Subscription count: 0
+```
+
+So we add a dependency
+
+```python
+from turtlesim.msg import Pose
+```
+
+Write the node:
+
+```python
+#!/usr/bin/env python3
+
+import rclpy
+from rclpy.node import Node
+from turtlesim.msg import Pose
+
+class SimpleTurtlesimKinematics(Node):
+    
+    def __init__(self):
+        # constructor
+        #init node
+        super().__init__('simple_turtlesim_kinematics')
+        # init two subscribers
+        self.turtle1_pose_sub_ = self.create_subscription(
+            Pose,
+            '/turtle1/pose',
+            self.turtle1PoseCallback,
+            10
+        )
+
+        self.turtle2_pose_sub_ = self.create_subscription(
+            Pose,
+            '/turtle2/pose',
+            self.turtle2PoseCallback,
+            10
+        )
+        # 2 variables
+        self.last_turtle1_pose_ = Pose()
+        self.last_turtle2_pose_ = Pose()
+
+    def turtle1PoseCallback(self, msg):
+        # save last turtle1 pose
+        self.last_turtle1_pose_ = msg
+        
+    def turtle2PoseCallback(self, msg):
+        # save last turtle2 pose
+        self.last_turtle2_pose_ = msg
+		
+        # calculate and log translation and rotation
+        Tx = self.last_turtle2_pose_.x - self.last_turtle1_pose_.x
+        Ty = self.last_turtle2_pose_.y - self.last_turtle1_pose_.y
+
+        theta = self.last_turtle2_pose_.theta - self.last_turtle1_pose_.theta
+        theta_deg = 180*theta/np.pi
+    
+        self.get_logger().info(f"""\n
+            Translation vector turtle1 -> turtle2 \n
+            Tx: {Tx:.2f} \n
+            Ty: {Ty:.2f} \n
+            Rotation matrix turtle1 -> turtle2 \n
+            theta (rad): {theta:.2f} rad \n
+            theta (deg): {theta_deg:.2f} deg \n
+            [R11 R12] :    [{np.cos(theta):.2f}\t{-np.sin(theta):.2f}] \n
+            [R21 R22] :    [{np.sin(theta):.2f}\t{np.cos(theta):.2f}] \n
+            """) 
+
+def main():
+    rclpy.init()
+    simple_turtlesim_kinematics = SimpleTurtlesimKinematics()
+    rclpy.spin(simple_turtlesim_kinematics)
+    simple_turtlesim_kinematics.destroy_node()
+    rclpy.shutdown()
+
+if __name__ == '__main__':
+    main()
+
+```
+
+
+
+install it in `setup.py`:
+
+```python
+ entry_points={
+        'console_scripts': [
+    		...
+			'simple_turtlesim_kinematics = bumperbot_py_examples.simple_turtlesim_kinematics:main',
+			]
+```
+
+and update dependencies in `package.xml`
+
+```xml
+  <exec_depend>turtlesim</exec_depend>
+```
+
+build, source and run the node:
+
+```bash
+$ ros2 run bumperbot_py_examples simple_turtlesim_kinematics 
+[INFO] [1727391554.455939178] [simple_turtlesim_kinematics]: 
+
+            Translation vector turtle1 -> turtle2 
+
+            Tx: -4.22 
+
+            Ty: -1.28 
+
+            Rotation matrix turtle1 -> turtle2 
+
+            theta (rad): -2.02 rad 
+
+            theta (deg): -115.51 deg 
+
+            [R11 R12] :    [-0.43	0.90] 
+
+            [R21 R22] :    [-0.90	-0.43] 
+
+...
+```
+

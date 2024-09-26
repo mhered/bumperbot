@@ -276,3 +276,77 @@ $ ros2 param set /simple_parametric simple_int_param "not_an_integer"
 Setting parameter failed: Invalid parameter
 ```
 
+## Section 6: Kinematics. Roto-translation (6.57,6.60)
+
+### Roto-translation in C++
+
+Spawn two turtles:
+
+```bash
+$ ros2 run turtlesim turtlesim_node
+$ ros2 service call /spawn turtlesim/srv/Spawn "x: 4.0
+y: 4.0
+theta: 0.0
+name: 'turtle2'"
+```
+
+`turtle1/pose` and `turtle2/pose` topics publish their respective poses.
+
+Create:
+
+* a header file `simple_turtlesim_kinematics.hpp ` inside `bumperbot_cpp_examples/include/bumperbot_cpp_examples`, contains declaration of classes and functions and initialization of attributes
+* and a node `simple_turtlesim_kinematics.cpp` inside `bumperbot_cpp_examples/src` folder, that contains the definition, i.e. the behavior: publishes the translation vector between `turtle2` and `turtle1`
+
+To find the type of messages:
+
+```bash
+$ ros2 topic info /turtle1/pose
+Type: turtlesim/msg/Pose
+Publisher count: 1
+Subscription count: 0
+```
+
+So we add a dependency to the header:
+
+```c++
+#include <turtlesim/msg/pose.hpp>
+```
+
+In `CMakeLists.txt`, add dependencies, install `include` folder to find `.hpp` and add `.cpp` as executable :
+
+```cmake
+...
+find_package(turtlesim REQUIRED)
+
+include_directories(include)
+install(
+  DIRECTORY include/
+  DESTINATION include
+)
+...
+add_executable(simple_turtlesim_kinematics src/simple_turtlesim_kinematics.cpp)
+ament_target_dependencies(simple_turtlesim_kinematics rclcpp turtlesim)
+
+#install them
+install(TARGETS
+  simple_publisher
+  simple_subscriber
+  simple_parametric
+  simple_turtlesim_kinematics
+  DESTINATION lib/${PROJECT_NAME}
+  )
+
+```
+
+Add dependency to `package.xml`:
+
+```xml
+...
+  <depend>turtlesim</depend>
+...
+```
+
+build source and run
+
+Note: the difficulty was in C++! I had to modify the code to get it to work: used `SharedPtr` in callback arguments and in the variables to store the last pose.
+
