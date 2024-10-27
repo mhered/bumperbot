@@ -449,3 +449,119 @@ $ ros2 run bumperbot_py_examples simple_turtlesim_kinematics
 ...
 ```
 
+## Section 7: Differential Kinematics. 
+
+### Simple Speed Controller (7.69)
+
+Note the `bumperbot_controller` package was created for cpp nodes so we need to make changes manually:
+
+1)  create a `bumperbot_controller` folder, an `__init__.py` empty file inside, then create a `simple_controller.py` node with:
+
+*  two parameters  `self.wheel_radius_` and `self.wheel_separation` that describe the robot geometry
+* a subscriber that listens to joystick commands of type `TwistStamped` in topic `bumperbot_controller/cmd_vel`. The joystick message contains the target robot linear and angular velocities. 
+* the subscriber has a callback function `self.velCallback` that computes wheel commands from robot linear and angular velocities using the equations derived in [Section_7_Differential_Kinematics.md](./Section_7_Differential_Kinematics.md)
+* a publisher for wheel speed commands of type `Float64MultiArray` in topic `simple_velocity_controller/commands` (see details of the topic and message type used by the ros2 controller in [Section_5_Control.md](./Section_5_Control.md))
+
+2. In `CMakeLists.txt` add dependencies to:
+   * `ament_cmake_python` (needed to build and compile python nodes) 
+   * dependencies used in the node: `rclpy`, `std_msgs`, `geometry_msgs`
+3. Also in `CMakeLists.txt` install the node `simple_controller.py`
+
+```cmake
+...
+# find dependencies
+find_package(ament_cmake REQUIRED)
+find_package(ament_cmake_python REQUIRED)
+find_package(rclpy REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
+
+ament_python_install_package(${PROJECT_NAME})
+...
+
+install (
+PROGRAMS ${PROJECT_NAME}/simple_controller.py
+ DESTINATION lib/${PROJECT_NAME}
+)
+
+```
+
+4. Add the dependencies also in `package.xml`:
+
+```xml
+...
+	<buildtool_depend>ament_cmake_python</buildtool_depend>
+...
+  <depend>rclpy</depend>
+  <depend>std_msgs</depend>
+  <depend>geometry_msgs</depend>
+...
+```
+
+
+
+Modify the launch file `controller.launch.py` :
+
+* add 3 arguments: `use_python` to toggle between python and cpp nodes, `wheel_radius` and `wheel_separation`
+* declare two nodes `simple_controller_py` and `simple_controller_cpp` with conditions `IfCondition` and `UnlessCondition` , passing the parameters`wheel_radius` and `wheel_separation`
+
+1. build with `$ colcon build` 
+
+2. In a second terminal, source and launch gazebo:
+
+```bash
+$ source install/setup.bash
+$ ros2 launch bumperbot_description gazebo.launch.py
+```
+
+3. In another terminal, source and launch the controller:
+
+```bash
+$ source install/setup.bash
+$ ros2 launch bumperbot_controller controller.launch.py  --show-args
+Arguments (pass arguments as '<name>:=<value>'):
+
+    'use_python':
+        Whether to use Python or C++ nodes
+        (default: 'true')
+
+    'wheel_radius':
+        Wheel radius
+        (default: '0.033')
+
+    'wheel_separation':
+        Wheel separation
+        (default: '0.17')
+```
+
+4. with the controller running, publish `TwistStamped` messages to `bumperbot_controller/cmd_vel` to get the robot to move:
+
+```bash
+$ ros2 topic list
+/bumperbot_controller/cmd_vel
+/clock
+/dynamic_joint_states
+/joint_states
+/parameter_events
+/performance_metrics
+/robot_description
+/rosout
+/simple_velocity_controller/commands
+/tf
+/tf_static
+$ ros2 topic pub /bumperbot_controller/cmd_vel geometry_msgs/msg/TwistStamped "header:
+  stamp:
+    sec: 0
+    nanosec: 0
+  frame_id: ''
+twist:
+  linear:
+    x: 0.1
+    y: 0.0
+    z: 0.0
+  angular:
+    x: 0.0
+    y: 0.0
+    z: 0.5" 
+```
+

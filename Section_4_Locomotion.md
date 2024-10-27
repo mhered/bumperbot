@@ -150,6 +150,8 @@ $ ros2 launch urdf_tutorial display.launch.py model:=/home/mhered/bumperbot_ws/s
 
 ![](./assets/bumperbot_2_loop_s.gif)
 
+Note (MH): I think it is important to define axes of wheels properly. In this case, following right hand rule, positive rotation of the wheels will make the robot move forward. To do: try to change orientation of axes of one wheel and see if this modifies the behaviour.
+
 ## rviz
 
 Tool that allows visualizing robots, obstacles, maps, or simulated sensor readings e.g. from laser scanners or cameras using plugins that produce intuitive graphical displays from messages published in certain ROS2 topics

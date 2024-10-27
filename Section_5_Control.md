@@ -281,6 +281,8 @@ publishing #2: std_msgs.msg.Float64MultiArray(layout=std_msgs.msg.MultiArrayLayo
 
 ![](./assets/bumperbot_is_alive_xs.gif)
 
+Note: `data=[1.0 , -1.0]` where first item is sent to the first joint declared in `bumperbot_controllers.yaml`( `wheel_right_joint`) and the second element is sent to the second joint (`wheel_left_joint`)
+
 Note: using double tab along the way autocompletes to find the list of available topics, then the list of messages this topic accepts, and finally the template for the message selected (remember need to add " !!):
 
 ```bash
