@@ -498,7 +498,7 @@ PROGRAMS ${PROJECT_NAME}/simple_controller.py
 ...
 ```
 
-
+### Launch file (7.71)
 
 Modify the launch file `controller.launch.py` :
 
@@ -564,4 +564,50 @@ twist:
     y: 0.0
     z: 0.5" 
 ```
+
+### Joystick teleoperation (7.72)
+
+Create a launch file `joystick_teleop.launch.py` that launches nodes:
+
+* `joy_node` from `joy` package, with parameters defined in `joy_config.yaml`:
+
+```yaml
+joystick:
+  ros__parameters:
+    device_id: 0
+    device_name: ""
+    deadzone: 0.5
+    autorepeat_rate: 0.0
+    sticky_buttons: false
+    coalesce_interval_ms: 1
+```
+
+* and `joy_teleop` from `joy_teleop` package, with parameters defined in `joy_teleop.yaml` :
+
+```yaml
+joy_teleop:
+  ros__parameters:
+    move:
+      type: topic
+      interface_type: geometry_msgs/msg/TwistStamped
+      topic_name: bumperbot_controller/cmd_vel
+      deadman_buttons: [5]
+      axis_mappings:
+        twist-linear-x:
+          axis: 1
+          scale: 1.0
+          offset: 0.0
+        twist-angular-z:
+          axis: 3
+          scale: 1.0
+          offset: 0.0
+```
+
+Note this configuration works with my gamepad in Mode X:
+
+* fwd/backwards moving the left stick up/down 
+
+* left/right rotation moving the right stick left/right
+
+* deadman button: RB (right index). Note: deadman button does not work properly
 
