@@ -492,3 +492,119 @@ PROGRAMS ${PROJECT_NAME}/simple_controller.py
 ...
 ```
 
+## Section 8: TF2. 
+
+### Simple TF2 static broadcaster in python (8.77)
+
+1. in package `bumperbot_py_examples` add a new node `simple_tf_kinematics.py` . Publishes a simple static translation of 30cm along the z-axis between `bumperbot_base`and `bumperbot_top` frames using the `StaticTransformBroadcaster()` class
+2. declare the new node in `setup.py`:
+
+```python
+entry_points={
+        'console_scripts': [
+			...
+            'simple_tf_kinematics = bumperbot_py_examples.simple_tf_kinematics:main',
+        ],
+    },
+```
+
+3. add dependencies to `package.xml`
+
+```xml
+...
+<exec_depend>tf2_ros</exec_depend>
+<exec_depend>geometry_msgs</exec_depend>
+ ...
+```
+
+build, source and execute, then inspect the `tf_static`topic :
+
+```bash
+(T1): $ colcon build
+
+(T2): $ source install/setup.bash
+(T2): $ ros2 run bumperbot_py_examples simple_tf_kinematics 
+[INFO] [1730576203.836503059] [simple_tf_kinematics]: Publishing static transform from bumperbot_base to bumperbot_top
+
+(T3): $ ros2 topic echo /tf_static 
+transforms:
+- header:
+    stamp:
+      sec: 1730576203
+      nanosec: 824236889
+    frame_id: bumperbot_base
+  child_frame_id: bumperbot_top
+  transform:
+    translation:
+      x: 0.0
+      y: 0.0
+      z: 0.3
+    rotation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+---
+```
+
+We can also visualize the fixed transform in rviz running `$ rviz2`, then selecting `bumperbot_base` as fixed frame then **Add** > **TF** and tick **Show Names**
+
+![](./assets/simple_static_transform.png)
+
+### Simple TF2 dynamic broadcaster in python (8.79)
+
+Modify `simple_tf_kinematics.py` to add a dynamic transform of `TransformBroadcaster()` class. Define a timer to update the pose and publish it every 0.1 seconds with the callback function `timerCallback`. No need to add new dependencies.
+
+build, source and execute, inspect the `tf` topic and visualize in rviz as before (selecting `odom` as fixed frame).
+
+```bash
+(T1): $ colcon build
+
+(T2): $ source install/setup.bash
+(T2): $ ros2 run bumperbot_py_examples simple_tf_kinematics 
+[INFO] [1730580408.588504111] [simple_tf_kinematics]: Publishing static transform from bumperbot_base to bumperbot_top
+
+(T3): $ ros2 topic echo /tf 
+...
+transforms:
+- header:
+    stamp:
+      sec: 1730579116
+      nanosec: 278956793
+    frame_id: odom
+  child_frame_id: bumperbot_base
+  transform:
+    translation:
+      x: 3.599999999999995
+      y: 0.0
+      z: 0.0
+    rotation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+---
+transforms:
+- header:
+    stamp:
+      sec: 1730579116
+      nanosec: 378906524
+    frame_id: odom
+  child_frame_id: bumperbot_base
+  transform:
+    translation:
+      x: 3.649999999999995
+      y: 0.0
+      z: 0.0
+    rotation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+---
+...
+```
+
+
+
+![](./assets/simple_dynamic_transform_xs.gif)
