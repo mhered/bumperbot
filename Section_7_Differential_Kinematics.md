@@ -78,6 +78,139 @@ $$
 
 This 3x2 matrix is the Jacobian (??)
 
-## Simple controller in Python(7.69)
+## Simple controller
 
-subscribes to `\cmd_vel` commands coming from the joystick V, W, calculates $\omega_R$, $\omega_L$ and publishes them in the topic `simple_velocity_controller/commands`
+See [Python_code_examples.md](./Python_code_examples.md) for the python code of a simple velocity controller (7.69) and [CPP_code_examples.md](CPP_code_examples.md) for the C++ code (7.70)
+
+## Launch file (7.71)
+
+Modify the launch file `controller.launch.py` :
+
+* add 3 arguments: `use_python` to toggle between python and cpp nodes, `wheel_radius` and `wheel_separation`
+* declare two nodes `simple_controller_py` and `simple_controller_cpp` with conditions `IfCondition` and `UnlessCondition` , passing the parameters`wheel_radius` and `wheel_separation`
+
+1. build with `$ colcon build` 
+
+2. In a second terminal, source and launch gazebo:
+
+```bash
+$ source install/setup.bash
+$ ros2 launch bumperbot_description gazebo.launch.py
+```
+
+3. In another terminal, source and launch the controller:
+
+```bash
+$ source install/setup.bash
+$ ros2 launch bumperbot_controller controller.launch.py  --show-args
+Arguments (pass arguments as '<name>:=<value>'):
+
+    'use_python':
+        Whether to use Python or C++ nodes
+        (default: 'true')
+
+    'wheel_radius':
+        Wheel radius
+        (default: '0.033')
+
+    'wheel_separation':
+        Wheel separation
+        (default: '0.17')
+```
+
+4. with the controller running, publish `TwistStamped` messages to `bumperbot_controller/cmd_vel` to get the robot to move:
+
+```bash
+$ ros2 topic list
+/bumperbot_controller/cmd_vel
+/clock
+/dynamic_joint_states
+/joint_states
+/parameter_events
+/performance_metrics
+/robot_description
+/rosout
+/simple_velocity_controller/commands
+/tf
+/tf_static
+$ ros2 topic pub /bumperbot_controller/cmd_vel geometry_msgs/msg/TwistStamped "header:
+  stamp:
+    sec: 0
+    nanosec: 0
+  frame_id: ''
+twist:
+  linear:
+    x: 0.1
+    y: 0.0
+    z: 0.0
+  angular:
+    x: 0.0
+    y: 0.0
+    z: 0.5" 
+```
+
+## Joystick teleoperation (7.72)
+
+Create a launch file `joystick_teleop.launch.py` that launches nodes:
+
+* `joy_node` from `joy` package, with parameters defined in `joy_config.yaml`:
+
+```yaml
+joystick:
+  ros__parameters:
+    device_id: 0
+    device_name: ""
+    deadzone: 0.5
+    autorepeat_rate: 0.0
+    sticky_buttons: false
+    coalesce_interval_ms: 1
+```
+
+* and `joy_teleop` from `joy_teleop` package, with parameters defined in `joy_teleop.yaml` :
+
+```yaml
+joy_teleop:
+  ros__parameters:
+    move:
+      type: topic
+      interface_type: geometry_msgs/msg/TwistStamped
+      topic_name: bumperbot_controller/cmd_vel
+      deadman_buttons: [5]
+      axis_mappings:
+        twist-linear-x:
+          axis: 1
+          scale: 1.0
+          offset: 0.0
+        twist-angular-z:
+          axis: 3
+          scale: 1.0
+          offset: 0.0
+```
+
+Note this configuration works with my gamepad in Mode X:
+
+* fwd/backwards moving the left stick up/down 
+
+* left/right rotation moving the right stick left/right
+
+* deadman button: RB (right index). Note: deadman button does not work properly
+
+## Using the diff_drive_controller (7.73) 
+
+ros2 control libraryies have a standard controller for differential drive robots
+
+1. modify `bumperbot_controllers.yaml` to declare and configure a new node named e.g. `bumperbot_controller` based on `diff_drive_controller/DiffDriveController`
+
+2. modify `controller.launch.py`to add an argument `use_simple_controller`, true by default, which will toggle between using the `simple_controller` we wrote and the standard `diff_drive_controller` node we named `bumperbot_controller` . We use `GroupAction` to launch on condition the group of nodes for `simple_controller`.
+
+colcon build and in other terminals source and launch gazebo, the control system of the robot, and the joystick :
+
+```bash
+(T2): $ ros2 launch bumperbot_description gazebo.launch.py 
+
+(T3): $ ros2 launch bumperbot_controller controller.launch.py use_simple_controller:=false
+
+(T4): $ ros2 launch bumperbot_controller joystick_teleop.launch.py
+```
+
+it works!

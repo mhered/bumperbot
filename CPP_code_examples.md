@@ -350,3 +350,17 @@ build source and run
 
 Note: the difficulty was in C++! I had to modify the code to get it to work: used `SharedPtr` in callback arguments and in the variables to store the last pose.
 
+## Section 7: Differential Kinematics. 
+
+### Simple Velocity Controller in C++ (7.70)
+
+Subscribes to `\cmd_vel` commands coming from the joystick V, W, calculates $\omega_R$, $\omega_L$ and publishes them in the topic `simple_velocity_controller/commands`
+
+TBC C++ node with:
+
+*  two parameters  `wheel_radius` and `wheel_separation` that describe the robot geometry
+*  a subscriber that listens to joystick commands of type `TwistStamped` in topic `bumperbot_controller/cmd_vel`. The joystick message contains the target robot linear and angular velocities. 
+*  the subscriber has a callback function `velCallback` that computes wheel commands from robot linear and angular velocities using the equations derived in [Section_7_Differential_Kinematics.md](./Section_7_Differential_Kinematics.md)
+*  a publisher for wheel speed commands of type `Float64MultiArray` in topic `simple_velocity_controller/commands` (see details of the topic and message type used by the ros2 controller in [Section_5_Control.md](./Section_5_Control.md))
+
+Add dependencies to `CMakeLists.txt` and `package.xml`
