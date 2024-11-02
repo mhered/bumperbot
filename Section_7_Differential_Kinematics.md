@@ -197,11 +197,11 @@ Note this configuration works with my gamepad in Mode X:
 
 ## Using the diff_drive_controller (7.73) 
 
-ros2 control libraryies have a standard controller for differential drive robots
+ros2 control libraries have a standard controller for differential drive robots
 
 1. modify `bumperbot_controllers.yaml` to declare and configure a new node named e.g. `bumperbot_controller` based on `diff_drive_controller/DiffDriveController`
 
-2. modify `controller.launch.py`to add an argument `use_simple_controller`, true by default, which will toggle between using the `simple_controller` we wrote and the standard `diff_drive_controller` node we named `bumperbot_controller` . We use `GroupAction` to launch on condition the group of nodes for `simple_controller`.
+2. modify `controller.launch.py` to add an argument `use_simple_controller`, true by default, which will toggle between using the `simple_controller` we wrote and the standard `diff_drive_controller` node we named `bumperbot_controller`. We use `GroupAction` to launch on condition the group of nodes for `simple_controller`.
 
 colcon build and in other terminals source and launch gazebo, the control system of the robot, and the joystick :
 
