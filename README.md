@@ -19,6 +19,7 @@ https://www.udemy.com/course/self-driving-and-ros-2-learn-by-doing-odometry-cont
 * [Notes on Section 6: Kinematics](./notes/Section_6_Kinematics.md)
 * [Notes on Section 7: Differential Kinematics](./notes/Section_7_Differential_Kinematics.md)
 * [Notes on Section 8: TF2 Library](./notes/Section_8_TF2.md)
+* [Notes on Section 10: Probability for Robotics](./notes/Section_10_Probability_for_Robotics.md)
 
 ### Code examples for Course 1
 
