@@ -12,19 +12,18 @@ https://www.udemy.com/course/self-driving-and-ros-2-learn-by-doing-odometry-cont
 
 ### Notes on Course 1
 
-* [Notes on Section 2: Setup](./Section_2_Setup.md)
-
-* [Notes on Section 3: Introduction to ROS2. Why ROS2?](./Section_3_Intro_to_ROS2_Why_ROS2.md)
-* [Notes on Section 4: Locomotion. URDF](./Section_4_Locomotion.md)
-* [Notes on Section 5: Control](./Section_5_Control.md)
-* [Notes on Section 6: Kinematics](./Section_6_Kinematics.md)
-* [Notes on Section 7: Differential Kinematics](./Section_7_Differential_Kinematics.md)
-* [Notes on Section 8: TF2 Library](./Section_8_TF2.md)
+* [Notes on Section 2: Setup](./notes/Section_2_Setup.md)
+* [Notes on Section 3: Introduction to ROS2. Why ROS2?](./notes/Section_3_Intro_to_ROS2_Why_ROS2.md)
+* [Notes on Section 4: Locomotion. URDF](./notes/Section_4_Locomotion.md)
+* [Notes on Section 5: Control](./notes/Section_5_Control.md)
+* [Notes on Section 6: Kinematics](./notes/Section_6_Kinematics.md)
+* [Notes on Section 7: Differential Kinematics](./notes/Section_7_Differential_Kinematics.md)
+* [Notes on Section 8: TF2 Library](./notes/Section_8_TF2.md)
 
 ### Code examples for Course 1
 
-* [Python code examples](./Python_code_examples.md)
-* [C++ code examples](./CPP_code_examples.md)
+* [Python code examples](./notes/Python_code_examples.md)
+* [C++ code examples](./notes/CPP_code_examples.md)
 
 ## Course 2 - Mapping and Localization
 

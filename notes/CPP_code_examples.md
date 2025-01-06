@@ -76,7 +76,7 @@ $ tree ~/bumperbot_ws/src/bumperbot_cpp_examples/
 
 ### Simple publisher in C++
 
-1. Create the `simple_publisher.cpp` file in [`./src/bumperbot_cpp_examples/src/`](./src/bumperbot_cpp_examples/src/) folder
+1. Create the `simple_publisher.cpp` file in [`../src/bumperbot_cpp_examples/src/`](../src/bumperbot_cpp_examples/src/) folder
 
 2. update `CMakeLists.txt` to add dependencies, declare the executable and install it
 
@@ -133,7 +133,7 @@ $ ros2 topic hz /chatter
 
 ### Simple subscriber in C++
 
-1. Create the `simple_subscriber.cpp` file in [`./src/bumperbot_cpp_examples/src/`](./src/bumperbot_cpp_examples/src/) folder
+1. Create the `simple_subscriber.cpp` file in [`../src/bumperbot_cpp_examples/src/`](../src/bumperbot_cpp_examples/src/) folder
 
 * Note: I had to do some changes in the code, needed to compile (may be because I am using ROS2 foxy?).
 
@@ -195,7 +195,7 @@ $ ros2 run bumperbot_cpp_examples simple_subscriber
 
 ### A simple parametric node in C++
 
-1. Create the `simple_parametric.cpp` file in [`./src/bumperbot_cpp_examples/src/`](./src/bumperbot_cpp_examples/src/) folder
+1. Create the `simple_parametric.cpp` file in [`../src/bumperbot_cpp_examples/src/`](../src/bumperbot_cpp_examples/src/) folder
 
 2. update `CMakeLists.txt` to add new dependencies (`rcl_interfaces`), declare the executable and install it:
 

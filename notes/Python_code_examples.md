@@ -104,7 +104,7 @@ $ tree ~/bumperbot_ws/src/bumperbot_py_examples/
 3 directories, 8 files
 ```
 
-The  [`bumperbot_py_examples`](./src/bumperbot_py_examples/bumperbot_py_examples/)  folder contains the python code.
+The  [`bumperbot_py_examples`](../src/bumperbot_py_examples/bumperbot_py_examples/)  folder contains the python code.
 
 3. create a python file inside it called `simple_publisher.py`
 
@@ -198,7 +198,7 @@ average rate: 1.000
 
 ## Subscriber in python
 
-1. create `simple_subscriber.py` file inside [`bumperbot_py_examples`](./src/bumperbot_py_examples/bumperbot_py_examples/) folder
+1. create `simple_subscriber.py` file inside [`bumperbot_py_examples`](../src/bumperbot_py_examples/bumperbot_py_examples/) folder
 
 2. Add an entry point in `setup.py` :
 
@@ -234,7 +234,7 @@ $ ros2 run bumperbot_py_examples simple_subscriber
 
 Certain nodes take parameters , i.e. settings to configure their behaviour
 
-1. create file `simple_parametric.py` inside [`bumperbot_py_examples`](./src/bumperbot_py_examples/bumperbot_py_examples) folder and write the code for parametric node
+1. create file `simple_parametric.py` inside [`bumperbot_py_examples`](../src/bumperbot_py_examples/bumperbot_py_examples) folder and write the code for parametric node
 
 2. add the entry point in `setup.py`: 
 
