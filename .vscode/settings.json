@@ -76,5 +76,8 @@
         "typeinfo": "cpp",
         "variant": "cpp",
         "bit": "cpp"
-    }
+    },
+    "urdf-visualizer.packages": {
+        "bumperbot_description": "${workspaceFolder}/src/bumperbot_description"
+    }  
 }
