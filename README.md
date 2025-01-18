@@ -39,7 +39,7 @@ https://www.udemy.com/course/self-driving-and-ros-2-learn-by-doing-map-localizat
 ## Course 3 - Planning and navigation
 
 * Path planning: comparing different algorithms to plan trajectories to reach a desired location in the map
-* Obstacle avoidance: sense the environment constantly and adjust trajectory if there is an unexpected obstable 
+* Obstacle avoidance: sense the environment constantly and adjust trajectory if there is an unexpected obstacle 
 * Behaviour trees: more complex logics for flexible navigation techniques
 
 ## Course 4 - Vision and Perception
