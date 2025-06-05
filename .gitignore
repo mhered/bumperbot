@@ -1,17 +1,49 @@
-*.pyc
-*.iml
-*.swp
-.project
-.pydevproject
-.DS_Store
-.idea
+# third party packages with their own version control
 
+
+# === ROS 2 build directories ===
+build/
+install/
+log/
+
+# === Python ===
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+*.egg
+.env
+.venv/
+venv/
+ENV/
+Pipfile.lock
+
+# === CMake ===
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# === colcon ===
+.colcon/
+*.log
+*.pyc
+
+# === VS Code (shared settings allowed) ===
 .vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
 
-# colcon/CMake output
-build
-install
-log
+# === Misc ===
+*.swp
+*.bak
+*.tmp
+*.orig
 
-__pycache__/*
-*.pyc
+# === ROS 2 launch config outputs ===
+*.launch.py~
+*.launch.xml~
+
+# === ROS 2 workspace-specific ===
+rosdep/

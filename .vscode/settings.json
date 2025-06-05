@@ -78,6 +78,6 @@
         "bit": "cpp"
     },
     "urdf-visualizer.packages": {
-        "bumperbot_description": "${workspaceFolder}/src/bumperbot_description"
+        "bumperbot_description": "${workspaceFolder}/src/bumperbot_description" 
     }  
 }
